@@ -1,0 +1,3 @@
+include *.txt
+include test/*py
+recursive-include doc *.html
