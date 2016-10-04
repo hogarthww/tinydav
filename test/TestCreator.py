@@ -162,7 +162,7 @@ class TestCreateLock(unittest.TestCase):
 class TestCreateReport(unittest.TestCase):
     """Test creator.create_report function."""
     def test_create_version_tree_report(self):
-        """Test creator.create_report_version_tree.""" 
+        """Test creator.create_report_version_tree."""
         # default report
         xml = creator.create_report_version_tree()
         self.assertEqual(xml, "<?xml version='1.0' encoding='UTF-8'?>\n"
@@ -181,7 +181,7 @@ class TestCreateReport(unittest.TestCase):
                               '<foo bar="1" /></version-tree>')
 
     def test_create_expand_property_report(self):
-        """Test creator.create_report_version_tree.""" 
+        """Test creator.create_report_version_tree."""
         # default report
         xml = creator.create_report_expand_property()
         self.assertEqual(xml, "<?xml version='1.0' encoding='UTF-8'?>\n"

@@ -26,13 +26,13 @@ class HTTPError(Exception):
 
     This object has the following attributes:
       response -- The HTTPResponse object.
-    
+
     """
     def __init__(self, response):
         """Initialize the HTTPError.
 
         response -- HTTPClient or one of its subclasses.
-        method -- The uppercase method name where the error occured.
+        method -- The uppercase method name where the error occurred.
 
         This instance has the following attributes:
 

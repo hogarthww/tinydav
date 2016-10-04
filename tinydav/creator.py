@@ -48,7 +48,7 @@ def create_propfind(names=False, properties=None,
                     include=None, namespaces=None):
     """Construct and return XML string for PROPFIND.
 
-    names -- Boolean whether the profind is requesting property names only.
+    names -- Boolean whether the propfind is requesting property names only.
     properties -- An iterable containing property names to request. Will only
                   by considered when names is False.
     include -- An Iterable containing properties that shall be returned by the
@@ -198,7 +198,7 @@ def create_report_expand_property(properties=None, elements=None,
     _addnamespaces(report, namespaces)
 
     def attach_properties(elem, properties):
-        """Attach property-Elements to given element recursivly.
+        """Attach property-Elements to given element recursively.
 
         elem -- ElementTree.Element to attach property-Elements to.
         properties -- string, list or mapping with element-names to attach.
@@ -208,7 +208,7 @@ def create_report_expand_property(properties=None, elements=None,
             properties = {properties: None}
         elif not isinstance(properties, Mapping):
             properties = dict.fromkeys(properties, None)
-        # recursivly attach property-elements to elem
+        # recursively attach property-elements to elem
         for (propname, subprops) in properties.items():
             prop = SubElement(elem, "property")
             prop.attrib["name"] = propname

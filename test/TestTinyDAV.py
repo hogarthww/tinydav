@@ -364,7 +364,7 @@ class HTTPClientTestCase(unittest.TestCase):
         context = dict(
             urllib_quote=mockurllib.quote,
             urllib_urlencode=mockurllib.urlencode,
-        )        
+        )
         with injected(self.http.post, **context):
             resp = self.http.post("/index", data)
             self.assertEqual(urlencode.count, 1)

@@ -124,7 +124,7 @@ class HTTPResponse(int):
     def __init__(self, response):
         """Initialize the HTTPResponse.
 
-        response -- The original httplib.HTTPResponse object. 
+        response -- The original httplib.HTTPResponse object.
 
         """
         self.response = response
@@ -182,7 +182,7 @@ class WebDAVResponse(HTTPResponse):
     object per result. If it was no multi-status response, the iterator will
     just yield this WebDAVResponse object.
 
-    The length of a WebDAVResponse object is 1, except for multi-status 
+    The length of a WebDAVResponse object is 1, except for multi-status
     responses. The length will then be the number of results in the
     multi-status.
 
@@ -190,7 +190,7 @@ class WebDAVResponse(HTTPResponse):
     def __init__(self, response):
         """Initialize the WebDAVResponse.
 
-        response -- The original httplib.HTTPResponse object. 
+        response -- The original httplib.HTTPResponse object.
 
         """
         super(WebDAVResponse, self).__init__(response)
@@ -232,7 +232,7 @@ class WebDAVResponse(HTTPResponse):
     def _parse_xml_content(self):
         """Parse the XML content.
 
-        If the response content cannot be parsed as XML content, 
+        If the response content cannot be parsed as XML content,
         <root><empty/></root> will be taken as content instead.
 
         """
@@ -258,7 +258,7 @@ class WebDAVResponse(HTTPResponse):
 class WebDAVLockResponse(WebDAVResponse):
     """Result from WebDAV LOCK request.
 
-    A WebDAVLockResponse object is a subclass of WebDAVResponse which is a 
+    A WebDAVLockResponse object is a subclass of WebDAVResponse which is a
     subclass of int. The int value of such an object is the HTTP status number
     from the response.
 
@@ -283,7 +283,7 @@ class WebDAVLockResponse(WebDAVResponse):
     object per result. If it was no multi-status response, the iterator will
     just yield this WebDAVLockResponse object.
 
-    The length of a WebDAVLockResponse object is 1, except for multi-status 
+    The length of a WebDAVLockResponse object is 1, except for multi-status
     responses. The length will then be the number of results in the
     multi-status.
 
@@ -292,21 +292,21 @@ class WebDAVLockResponse(WebDAVResponse):
 
     >>> lock = dav.lock("somewhere")
     >>> with lock:
-    >>>    dav.put("somwhere", <something>)
+    >>>    dav.put("somewhere", <something>)
 
     The above example will make a tagged PUT request. For untagged requests do:
 
     >>> lock = dav.lock("somewhere")
     >>> with lock(False):
-    >>>    dav.put("somwhere", <something>)
+    >>>    dav.put("somewhere", <something>)
 
     """
     def __new__(cls, client, uri, response):
         """Construct WebDAVLockResponse.
-        
+
         client -- HTTPClient instance or one of its subclasses.
         uri -- The called uri.
-        response --The original httplib.HTTPResponse object. 
+        response --The original httplib.HTTPResponse object.
 
         """
         return WebDAVResponse.__new__(cls, response)
@@ -464,7 +464,7 @@ class MultiStatusResponse(int):
     A MultiStatusResponse object is a subclass of int. The int value of such an
     object is the HTTP status number from the response.
 
-    Furthermore this object implements the dictionary interface. Through it 
+    Furthermore this object implements the dictionary interface. Through it
     you can access all properties that the resource has.
 
     This object has the following attributes:
@@ -583,7 +583,7 @@ class MultiStatusResponse(int):
         default -- Return this value when key does not exist.
         namespace -- The namespace in which the property lives in. Must be
                      given, when the key value has no namespace defined and
-                     the namespace ist not DAV:.
+                     the namespace is not DAV:.
 
         """
         if namespace:
@@ -777,7 +777,7 @@ class HTTPClient(object):
 
         uri -- URI the request is for.
         headers -- Mapping with additional headers to send. Unicode values that
-                   are no ASCII will be MIME-encoded with UTF-8. Set 
+                   are no ASCII will be MIME-encoded with UTF-8. Set
                    tinydav.default_header_encoding to another encoding, if
                    UTF-8 doesn't suit you.
         query -- Mapping with key/value-pairs to be added as query to the URI.
@@ -825,7 +825,7 @@ class HTTPClient(object):
 
             user -- Username as bytes string.
             password -- Password for user as bytes.
-            encoder -- Base64 encoder function. Default is the standard 
+            encoder -- Base64 encoder function. Default is the standard
                        encoder. Should not be changed.
 
             """
@@ -930,17 +930,17 @@ class HTTPClient(object):
         headers -- If given, must be a mapping with headers to set.
         query -- Mapping with key/value-pairs to be added as query to the URI.
         as_multipart -- Send post data as multipart/form-data. content must be
-                        a dict, then. If content is not a dict, then this 
+                        a dict, then. If content is not a dict, then this
                         argument will be ignored. The values of the dict may be
                         a subclass of email.mime.base.MIMEBase, which will be
                         attached to the multipart as is, a 2-tuple containing
                         the actual value (or file-like object) and an encoding
-                        for this value (or the content-type in case of a 
+                        for this value (or the content-type in case of a
                         file-like object).
         encoding -- Send multipart content with this encoding. Default is
                     ASCII.
         with_filenames -- If True, a multipart's files will be sent with the
-                          filename paramenter set. Default is False.
+                          filename parameter set. Default is False.
 
         Raise HTTPUserError on 4xx HTTP status codes.
         Raise HTTPServerError on 5xx HTTP status codes.
@@ -957,7 +957,7 @@ class HTTPClient(object):
                 headers["content-type"] = "application/x-www-form-urlencoded"
                 content = urllib_urlencode(content)
         if hasattr(content, "read") and not PYTHON2_6:
-            # python 2.5 httlib cannot handle file-like objects
+            # python 2.5 httplib cannot handle file-like objects
             content = content.read()
         return self._request("POST", uri, content, headers)
 
@@ -1004,7 +1004,7 @@ class HTTPClient(object):
                stated in RFC2616, section 14.45.
         headers -- If given, must be a mapping with headers to set.
 
-        Raise ValueError, if maxforward is not an int or convertable to
+        Raise ValueError, if maxforward is not an int or convertible to
         an int.
         Raise TypeError, if via is not an iterable of string.
         Raise HTTPUserError on 4xx HTTP status codes.
@@ -1123,7 +1123,7 @@ class CoreWebDAVClient(HTTPClient):
         """Make PROPFIND request and return status.
 
         uri -- Path for PROPFIND.
-        depth -- Depth for PROFIND request. Default is zero.
+        depth -- Depth for PROPFIND request. Default is zero.
         names -- If True, only the available namespace names are returned.
         properties -- If given, an iterable with all requested properties is
                       expected.
@@ -1207,7 +1207,7 @@ class CoreWebDAVClient(HTTPClient):
         destination -- Path of destination to copy source to.
         depth -- Either 0 or "infinity". Default is the latter.
         overwrite -- If not None, then a boolean indicating whether the
-                     Overwrite header ist set to "T" (True) or "F" (False).
+                     Overwrite header is set to "T" (True) or "F" (False).
         headers -- If given, must be a mapping with headers to set.
 
         Raise HTTPUserError on 4xx HTTP status codes.
@@ -1226,7 +1226,7 @@ class CoreWebDAVClient(HTTPClient):
         destination -- Path of destination to move source to.
         depth -- Either 0 or "infinity". Default is the latter.
         overwrite -- If not None, then a boolean indicating whether the
-                     Overwrite header ist set to "T" (True) or "F" (False).
+                     Overwrite header is set to "T" (True) or "F" (False).
         headers -- If given, must be a mapping with headers to set.
 
         Raise ValueError, if an illegal depth was given.
