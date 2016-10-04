@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """Testloader for setuptools unittest."""
+from __future__ import print_function
 
 from os import path
 import sys
@@ -54,8 +55,8 @@ def run():
 
     if coverage:
         cov.stop()
-        print "\nTest coverage report:"
-        print "====================="
+        print("\nTest coverage report:")
+        print("=====================")
         cov.report(MODULES)
 
 
