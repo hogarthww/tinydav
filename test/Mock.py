@@ -21,8 +21,14 @@ from collections import defaultdict
 from contextlib import contextmanager
 from email.mime.multipart import MIMEMultipart
 from functools import partial
-from StringIO import StringIO
-import urllib2
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
+try:
+    import urllib2
+except ImportError:
+    import urllib as urllib2
 
 
 @contextmanager

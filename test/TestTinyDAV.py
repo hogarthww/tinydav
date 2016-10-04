@@ -19,11 +19,21 @@
 """Unittests for tinydav lib."""
 
 from __future__ import with_statement
-from cookielib import CookieJar
-from StringIO import StringIO
+try:
+    from cookielib import CookieJar
+except ImportError:
+    from http.cookiejar import CookieJar
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 from xml.etree.ElementTree import ElementTree
 import hashlib
-import httplib
+try:
+    import httplib
+except ImportError:
+    import http.client as httplib
+
 import urllib
 import socket
 import sys
