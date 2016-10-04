@@ -170,7 +170,7 @@ class ModuleProxy(object):
         return getattr(self.__module, name)
 
 
-class Response(urllib2.HTTPError):
+class Response(object):
     """Mock urllib2 response object."""
 
     def __init__(self):

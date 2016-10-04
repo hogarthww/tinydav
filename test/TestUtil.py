@@ -43,7 +43,8 @@ Content-Transfer-Encoding: 7bit
 Content-Disposition: form-data; name="b"
 
 bar
---foobar--"""
+--foobar--
+"""
 
 
 MULTI_ISO = """\
@@ -61,7 +62,9 @@ Content-Transfer-Encoding: quoted-printable
 Content-Disposition: form-data; name="b"
 
 =C3=A4=C3=B6=C3=BC=C3=9F
---foobar--"""
+--foobar--
+"""
+
 
 MIME_ISO_EXPLICIT = """\
 --foobar
@@ -78,7 +81,8 @@ Content-Transfer-Encoding: quoted-printable
 Content-Disposition: form-data; name="b"
 
 =C3=A4=C3=B6=C3=BC=C3=9F
---foobar--"""
+--foobar--
+"""
 
 
 MIME_FILE = """\
@@ -96,7 +100,8 @@ Content-Transfer-Encoding: base64
 Content-Disposition: form-data; name="b"
 
 VGhpcyBpcyBhIHRlc3QgZmlsZS4=
---foobar--"""
+--foobar--
+"""
 
 
 MIME_FILE_EXPLICIT = """\
@@ -114,7 +119,8 @@ Content-Transfer-Encoding: base64
 Content-Disposition: form-data; name="b"
 
 VGhpcyBpcyBhIHRlc3QgZmlsZS4=
---foobar--"""
+--foobar--
+"""
 
 
 MIME_FILE_NAME = """\
@@ -132,7 +138,8 @@ Content-Transfer-Encoding: base64
 Content-Disposition: form-data; name="b"; filename="test.txt"
 
 VGhpcyBpcyBhIHRlc3QgZmlsZS4=
---foobar--"""
+--foobar--
+"""
 
 
 MIME_FILES = """\
@@ -162,7 +169,9 @@ Content-Disposition: file; name="b"
 
 VGhpcyBpcyBhIHRlc3QgZmlsZS4=
 --foobar-mixed--
---foobar--"""
+
+--foobar--
+"""
 
 
 class UtilTestCase(unittest.TestCase):
