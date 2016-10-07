@@ -1022,7 +1022,7 @@ class MultiStatusResponseTestCase(unittest.TestCase):
         """Test MultiStatusResponse.keys."""
         expect = ['getetag', '{DC:}created', '{DC:}resource', '{DC:}author']
         expect.sort()
-        keys = self.msr.keys()
+        keys = list(self.msr.keys())
         keys.sort()
         self.assertEqual(keys, expect)
 
@@ -1038,7 +1038,7 @@ class MultiStatusResponseTestCase(unittest.TestCase):
         """Test MultiStatusResponse.iterkeys."""
         expect = ['getetag', '{DC:}created', '{DC:}resource', '{DC:}author']
         expect.sort()
-        keys = list(self.msr.iterkeys())
+        keys = list(self.msr.keys())
         keys.sort()
         self.assertEqual(keys, expect)
 
@@ -1060,7 +1060,7 @@ class MultiStatusResponseTestCase(unittest.TestCase):
                   ('{DC:}resource', None),
                   ('{DC:}author', 'Me')]
         expect.sort()
-        items = list((k, v.text) for (k, v) in self.msr.iteritems())
+        items = list((k, v.text) for (k, v) in self.msr.items())
         items.sort()
         self.assertEqual(items, expect)
 
@@ -1082,5 +1082,5 @@ class MultiStatusResponseTestCase(unittest.TestCase):
     def test_namespaces(self):
         """Test MultiStatusResponse.namespaces property."""
         expect = set(["DC:", "DAV:"])
-        self.msr.iterkeys = lambda b: ["foo", "bar", "{DC:}x", "{DAV:}y"]
+        self.msr.keys = lambda b: ["foo", "bar", "{DC:}x", "{DAV:}y"]
         self.assertEqual(self.msr.namespaces, expect)

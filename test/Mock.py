@@ -21,14 +21,6 @@ from collections import defaultdict
 from contextlib import contextmanager
 from email.mime.multipart import MIMEMultipart
 from functools import partial
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
-try:
-    import urllib2
-except ImportError:
-    import urllib as urllib2
 
 
 @contextmanager
@@ -38,7 +30,10 @@ def injected(func, **kwargs):
     if hasattr(func, "im_func"):
         func = func.im_func
     # save and replace current function globals as to kwargs
-    func_globals = func.func_globals
+    try:
+        func_globals = func.func_globals
+    except AttributeError:
+        func_globals = func.__globals__
     saved = dict((k, func_globals[k]) for k in kwargs if k in func_globals)
     func_globals.update(kwargs)
     # context is now ready to be used
@@ -52,12 +47,12 @@ def replaced(obj, **attrs):
     """Replace attribute in object while in context mode."""
     # save and replace current attributes
     saved = dict((k, getattr(obj, k)) for k in attrs)
-    for (name, attr) in attrs.iteritems():
+    for (name, attr) in attrs.items():
         setattr(obj, name, attr)
     # context is ready
     yield
     # restore previous state
-    for (name, attr) in saved.iteritems():
+    for (name, attr) in saved.items():
         setattr(obj, name, attr)
 
 
@@ -94,7 +89,7 @@ class Omnivore(object):
         """
         self.__name__ = "Omnivore"
         self.retvals = dict()
-        for (key, value) in kwargs.iteritems():
+        for (key, value) in kwargs.items():
             self.retvals[key] = iter(value)
         self.called = defaultdict(list)
 
@@ -102,7 +97,7 @@ class Omnivore(object):
         self.called["__enter__"] = True
         return self
 
-    def __exit__(exctype, excvalue, exctb):
+    def __exit__(self, exctype, excvalue, exctb):
         self.called["__exit__"] = (exctype, excvalue, exctb)
 
     def method(self, methodname, *args, **kwargs):
@@ -192,4 +187,3 @@ class Response(object):
 
     def read(self):
         return self.content
-
