@@ -26,7 +26,7 @@ PYTHON3 = (sys.version_info >= (3, 0))
 
 from contextlib import closing
 from email.header import Header
-from functools import wraps, partial
+from functools import partial
 
 if PYTHON2:
     from httplib import MULTI_STATUS, OK, CONFLICT, NO_CONTENT, UNAUTHORIZED
@@ -44,7 +44,7 @@ else:
     import base64
     import http.client as httplib
 
-from xml.etree.ElementTree import ElementTree, Element, SubElement, tostring
+from xml.etree.ElementTree import ElementTree
 
 if PYTHON2_7 or PYTHON3:
     from xml.etree.ElementTree import ParseError

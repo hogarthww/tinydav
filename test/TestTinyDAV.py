@@ -35,12 +35,10 @@ except ImportError:
     import http.client as httplib
 
 import urllib
-import socket
 import sys
-import tinydav
 import unittest
 
-from tinydav import HTTPError, HTTPUserError, HTTPServerError
+from tinydav import HTTPUserError, HTTPServerError
 from tinydav import HTTPClient
 from tinydav import HTTPResponse
 from tinydav import CoreWebDAVClient
@@ -313,7 +311,7 @@ class HTTPClientTestCase(unittest.TestCase):
         # prepare mock connection
         self.con.response.status = 200
         query = {"path": "/foo/bar"}
-        self.assertEqual(self.http.post("/index", None, query=query), 200)
+        self.assertEqual(self.http.post("/index", data, query=query), 200)
         self.assertEqual(self.con.method, "POST")
         self.assertEqual(self.con.path, "/index?path=%2Ffoo%2Fbar")
         self.assertTrue(self.con.closed)
@@ -323,7 +321,6 @@ class HTTPClientTestCase(unittest.TestCase):
         data = StringIO("Test data")
         # prepare mock connection
         self.con.response.status = 200
-        query = {"path": "/foo/bar"}
         with injected(self.http.post, PYTHON2_6=False):
             self.assertEqual(self.http.post("/index", data), 200)
             self.assertEqual(self.con.method, "POST")
@@ -448,7 +445,6 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
         source = "/foo bar/baz"
         dest = "/dest/in/ation"
         headers = {"X-Test": "Hello"}
-        query = {"foo": "bär"}
         http = CoreWebDAVClient("127.0.0.1", 80)
         http.setbasicauth("me", "secret")
         (source, headers) = http._preparecopymove(source, dest, 0,
@@ -467,7 +463,6 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
         source = "/foo bar/baz/"
         dest = "/dest/in/ation"
         headers = {"X-Test": "Hello"}
-        query = {"foo": "bär"}
         http = CoreWebDAVClient("127.0.0.1", 80)
         http.setbasicauth("me", "secret")
         (source, headers) = http._preparecopymove(source, dest, 0,
@@ -487,7 +482,6 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
         source = "/foo bar/baz"
         dest = "/dest/in/ation"
         headers = {"X-Test": "Hello"}
-        query = {"foo": "bär"}
         http = CoreWebDAVClient("127.0.0.1", 80)
         http.setbasicauth("me", "secret")
         self.assertRaises(
@@ -604,7 +598,6 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
         self.con.response.status = 200
         source = "/foo bar/baz/"
         dest = "/dest/in/ation"
-        headers = {"X-Test": "Hello"}
         self.assertRaises(
             ValueError,
             self.dav.move,
@@ -668,7 +661,7 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
         """Test CoreWebDAVClient.unlock with lock object."""
         self.dav.locks[self.lock._tag] = self.lock
         self.con.response.status = 204
-        resp = self.dav.unlock(self.lock)
+        self.dav.unlock(self.lock)
         self.assertEqual(self.con.method, "UNLOCK")
         self.assertEqual(self.con.headers["Lock-Token"],
                          "<%s>" % self.lock.locktokens[0])
@@ -678,7 +671,7 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
         """Test CoreWebDAVClient.unlock with uri."""
         self.dav.locks[self.lock._tag] = self.lock
         self.con.response.status = 204
-        resp = self.dav.unlock("/")
+        self.dav.unlock("/")
         self.assertEqual(self.con.method, "UNLOCK")
         self.assertEqual(self.con.headers["Lock-Token"],
                          "<%s>" % self.lock.locktokens[0])
@@ -692,7 +685,7 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
     def test_unlock_lock_no_token(self):
         """Test CoreWebDAVClient.unlock with lock object and no token."""
         self.con.response.status = 204
-        resp = self.dav.unlock(self.lock)
+        self.dav.unlock(self.lock)
         self.assertEqual(self.con.method, "UNLOCK")
         self.assertEqual(self.con.headers["Lock-Token"],
                          "<%s>" % self.lock.locktokens[0])

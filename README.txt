@@ -17,7 +17,7 @@ Requirements
 Installation
 ------------
 Get from PyPI:
-# easy_install tinydav
+# pip install tinydav
 
 Get package from https://gitlab.helduel.de/open-source/tinydav:
 python setup.py build

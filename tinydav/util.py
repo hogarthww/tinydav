@@ -20,7 +20,6 @@ import sys
 PYTHON2 = ((2, 5) <= sys.version_info <= (3, 0))
 
 from email.encoders import encode_base64
-from email.mime.application import MIMEApplication
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -133,9 +132,9 @@ class Multipart(object):
                 if isinstance(value, MIMEBase):
                     part = value
                 else:
-                    encoding = encoding if encoding else default_encoding
+                    encoding = encoding if encoding else self.default_encoding
                     part = MIMEText(value, "plain", encoding)
-                add_disposition(part, key)
+                self._add_disposition(part, key)
                 self._mp.attach(part)
 
     def _add_disposition(self, part, name, filename=None,
