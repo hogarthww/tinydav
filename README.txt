@@ -41,4 +41,4 @@ https://gitlab.helduel.de/open-source/tinydav/wikis/home
 
 License
 -------
-TinyDAV ist licensed under the LGPLv3. See separate COPYING and COPYING.LESSER. 
+TinyDAV is licensed under the LGPLv3. See separate COPYING and COPYING.LESSER.
