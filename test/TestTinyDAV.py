@@ -49,7 +49,7 @@ from tinydav import MultiStatusResponse
 from Mock import injected, replaced
 import Mock
 
-PYTHONVERSION = sys.version_info[:2] # (2, 5) or (2, 6)
+PYTHONVERSION = sys.version_info[:2]  # (2, 5) or (2, 6)
 
 if PYTHONVERSION >= (2, 7):
     from xml.etree.ElementTree import ParseError
@@ -166,6 +166,7 @@ opaquelocktoken:e71d4fae-5dec-22d6-fea5-00a0c91e6be4
 
 class HTTPClientTestCase(unittest.TestCase):
     """Test the HTTPClient class."""
+
     def setUp(self):
         """Setup the client."""
         self.http = HTTPClient("127.0.0.1", 80)
@@ -187,7 +188,6 @@ class HTTPClientTestCase(unittest.TestCase):
         http = HTTPClient("127.0.0.1", 80, protocol="https")
         con = http._getconnection()
         self.assertTrue(isinstance(con, httplib.HTTPSConnection))
-
 
         http = HTTPClient("127.0.0.1", timeout=300, source_address="here.loc")
         # Python2.5
@@ -350,6 +350,7 @@ class HTTPClientTestCase(unittest.TestCase):
     def test_post_form_data(self):
         """Test HTTPClient.post form-data."""
         data = dict(a="foo", b="bar")
+
         def urlencode(data):
             urlencode.count += 1
             return urllib.urlencode(data)
@@ -429,6 +430,7 @@ class HTTPClientTestCase(unittest.TestCase):
 
 class CoreWebDAVClientTestCase(unittest.TestCase):
     """Test the CoreWebDAVClient class."""
+
     def setUp(self):
         """Setup the client."""
         self.dav = CoreWebDAVClient("127.0.0.1", 80)
@@ -694,6 +696,7 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
 
 class ExtendedWebDAVClientTestCase(unittest.TestCase):
     """Test the ExtendedWebDAVClient class."""
+
     def setUp(self):
         """Setup the client."""
         self.dav = ExtendedWebDAVClient("127.0.0.1", 80)
@@ -746,7 +749,8 @@ class ExtendedWebDAVClientTestCase(unittest.TestCase):
         self.con.response.status = 207
         self.con.response.content = REPORT
         props = ["version-name", "creator-displayname", "successor-set"]
-        response = self.dav.expand_property_report("/foo.html", properties=props)
+        response = self.dav.expand_property_report(
+            "/foo.html", properties=props)
         self.assertEqual(response, 207)
         self.assertEqual(self.con.method, "REPORT")
         self.assertEqual(self.con.path, "/foo.html")
@@ -780,6 +784,7 @@ class ExtendedWebDAVClientTestCase(unittest.TestCase):
 
 class HTTPResponseTestCase(unittest.TestCase):
     """Test HTTPResponse class."""
+
     def setUp(self):
         """Initialize the tests."""
         self.response = Mock.Response()
@@ -829,6 +834,7 @@ class HTTPResponseTestCase(unittest.TestCase):
 
 class WebDAVResponseTestCase(unittest.TestCase):
     """Test the WebDAVResponse class."""
+
     def test_init(self):
         """Test initializing the WebDAVResponse."""
         response = Mock.Response()
@@ -919,6 +925,7 @@ class WebDAVResponseTestCase(unittest.TestCase):
 
 class WebDAVLockResponseTestCase(unittest.TestCase):
     """Test the WebDAVLockResponse class."""
+
     def setUp(self):
         """Setup the tests"""
         self.client = CoreWebDAVClient("localhost")
@@ -992,6 +999,7 @@ class WebDAVLockResponseTestCase(unittest.TestCase):
 
 class MultiStatusResponseTestCase(unittest.TestCase):
     """Test the MultiStatusResponse class."""
+
     def setUp(self):
         self.etree = ElementTree()
         self.etree.parse(StringIO(RESPONSE))

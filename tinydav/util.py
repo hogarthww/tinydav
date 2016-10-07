@@ -60,6 +60,7 @@ class FakeHTTPRequest(object):
     See http://docs.python.org/library/cookielib.html#cookiejar-and-filecookiejar-objects
 
     """
+
     def __init__(self, client, uri, headers):
         """Initialize the fake HTTP request object.
 
@@ -107,6 +108,7 @@ def make_absolute(httpclient, uri):
 
 
 class Multipart(object):
+
     def __init__(self, data, default_encoding="ascii", with_filenames=False):
         self.data = data
         self.default_encoding = default_encoding

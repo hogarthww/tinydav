@@ -23,10 +23,12 @@ import unittest
 
 from tinydav import creator
 
-PYTHONVERSION = sys.version_info[:2] # (2, 5) or (2, 6)
+PYTHONVERSION = sys.version_info[:2]  # (2, 5) or (2, 6)
+
 
 class TestAddNamespaces(unittest.TestCase):
     """Test creator._addnamespaces."""
+
     def test_addnamespaces(self):
         """Test creator._addnamespaces."""
         namespaces = {"a": "ABC:", "b": "XXX:"}
@@ -38,6 +40,7 @@ class TestAddNamespaces(unittest.TestCase):
 
 class TestCreatePropFind(unittest.TestCase):
     """Test creator.create_propfind function."""
+
     def test_create_propfind(self):
         """Test WebDAVClient._create_propfind."""
         # allprops
@@ -45,7 +48,8 @@ class TestCreatePropFind(unittest.TestCase):
         self.assertEqual(xml, b'<propfind xmlns="DAV:"><allprop /></propfind>')
         # names only
         xml = creator.create_propfind(True, None, None, None)
-        self.assertEqual(xml, b'<propfind xmlns="DAV:"><propname /></propfind>')
+        self.assertEqual(
+            xml, b'<propfind xmlns="DAV:"><propname /></propfind>')
         # properties
         xml = creator.create_propfind(False, ["{DC:}author"], None, None)
         if PYTHONVERSION >= (2, 7):
@@ -67,6 +71,7 @@ class TestCreatePropFind(unittest.TestCase):
 
 class TestCreatePropPatch(unittest.TestCase):
     """Test creator.create_proppatch function."""
+
     def test_create_proppatch_set(self):
         """Test WebDAVClient._create_proppatch: set property"""
         # set only
@@ -120,6 +125,7 @@ class TestCreatePropPatch(unittest.TestCase):
 
 class TestCreateLock(unittest.TestCase):
     """Test creator.create_lock function."""
+
     def test_create_lock(self):
         """Test creator.create_lock."""
         xml = creator.create_lock()
@@ -154,6 +160,7 @@ class TestCreateLock(unittest.TestCase):
 
 class TestCreateReport(unittest.TestCase):
     """Test creator.create_report function."""
+
     def test_create_version_tree_report(self):
         """Test creator.create_report_version_tree."""
         # default report
@@ -199,17 +206,17 @@ class TestCreateReport(unittest.TestCase):
         xml = creator.create_report_expand_property(p)
         self.assertEqual(xml, b'<expand-property xmlns="DAV:">'
                               b'<property name="baz">'
-                                b'<property name="c" />'
-                                b'<property name="d">'
-                                 b'<property name="e" />'
-                                b'</property>'
+                         b'<property name="c" />'
+                         b'<property name="d">'
+                         b'<property name="e" />'
+                         b'</property>'
                               b'</property>'
                               b'<property name="foo">'
-                                b'<property name="bar" />'
+                         b'<property name="bar" />'
                               b'</property>'
                               b'<property name="bar">'
-                                b'<property name="a" />'
-                                b'<property name="b" />'
+                         b'<property name="a" />'
+                         b'<property name="b" />'
                               b'</property>'
                               b'</expand-property>')
         # additional xml

@@ -179,6 +179,7 @@ VGhpcyBpcyBhIHRlc3QgZmlsZS4=
 
 class UtilTestCase(unittest.TestCase):
     """Test util module."""
+
     def test_fake_http_request(self):
         """Test util.FakeHTTPReqest."""
         client = HTTPClient("localhost")
@@ -322,7 +323,8 @@ class UtilTestCase(unittest.TestCase):
         context = dict(MIMEMultipart=Mock.FakeMIMEMultipart())
         with injected(util.make_multipart, **context):
             content = dict(a="foo", b=sio)
-            (headers, multi) = util.make_multipart(content, with_filenames=True)
+            (headers, multi) = util.make_multipart(
+                content, with_filenames=True)
             self.assertEqual(
                 headers["Content-Type"],
                 'multipart/form-data; boundary="foobar"'
@@ -346,7 +348,8 @@ class UtilTestCase(unittest.TestCase):
         context = dict(MIMEMultipart=Mock.FakeMIMEMultipart())
         with injected(util.make_multipart, **context):
             content = dict(a="foo", b=sio, c=sio2)
-            (headers, multi) = util.make_multipart(content, with_filenames=True)
+            (headers, multi) = util.make_multipart(
+                content, with_filenames=True)
             self.assertEqual(
                 headers["Content-Type"],
                 'multipart/form-data; boundary="foobar"'

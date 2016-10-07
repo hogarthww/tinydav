@@ -119,6 +119,7 @@ class Omnivore(object):
 
 class FakeMIMEMultipart(object):
     """Subclass of MIMEMultipart."""
+
     def __init__(self, boundary="foobar"):
         self.boundary = boundary
 

@@ -28,6 +28,7 @@ class HTTPError(Exception):
       response -- The HTTPResponse object.
 
     """
+
     def __init__(self, response):
         """Initialize the HTTPError.
 
@@ -57,4 +58,3 @@ class HTTPUserError(HTTPError):
 
 class HTTPServerError(HTTPError):
     """Exception class for 5xx HTTP errors."""
-

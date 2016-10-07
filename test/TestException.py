@@ -25,6 +25,7 @@ import Mock
 
 class HTTTPErrorTestCase(unittest.TestCase):
     """Test HTTPErrro exception class."""
+
     def setUp(self):
         """Setup the tests."""
         self.response = 400
@@ -44,4 +45,3 @@ class HTTTPErrorTestCase(unittest.TestCase):
         response.statusline = "HTTP/1.1 400 Some error"
         err = HTTPError(response)
         self.assertEqual(str(err), "HTTP/1.1 400 Some error")
-

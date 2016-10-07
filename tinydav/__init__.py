@@ -70,7 +70,7 @@ __all__ = (
 
 # RFC 2518, 9.8 Timeout Request Header
 # The timeout value for TimeType "Second" MUST NOT be greater than 2^32-1.
-MAX_TIMEOUT = 2**32-1
+MAX_TIMEOUT = 2**32 - 1
 
 ACTIVELOCK = "./{DAV:}lockdiscovery/{DAV:}activelock"
 
@@ -129,7 +129,7 @@ class HTTPResponse(int):
         self.content = response.read()
         version = "HTTP/%s.%s" % tuple(str(response.version))
         self.statusline = "%s %d %s"\
-                        % (version, response.status, response.reason)
+            % (version, response.status, response.reason)
         if self == UNAUTHORIZED:
             self._setauth()
 
@@ -184,6 +184,7 @@ class WebDAVResponse(HTTPResponse):
     multi-status.
 
     """
+
     def __init__(self, response):
         """Initialize the WebDAVResponse.
 
@@ -1267,7 +1268,7 @@ class CoreWebDAVClient(HTTPClient):
         if timeout is not None:
             try:
                 timeout = int(timeout)
-            except ValueError: # no number
+            except ValueError:  # no number
                 if timeout.lower() == "infinite":
                     value = "Infinite"
                 else:
@@ -1340,6 +1341,7 @@ class CoreWebDAVClient(HTTPClient):
 
 class ExtendedWebDAVClient(CoreWebDAVClient):
     """WebDAV client with versioning extensions (RFC 3253)."""
+
     def __report(self, uri, depth, content, headers):
         depth = util.get_depth(depth)
         (uri, headers) = self._prepare(uri, headers)

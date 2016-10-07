@@ -221,4 +221,3 @@ def create_report_expand_property(properties=None, elements=None,
         for element in elements:
             report.append(element)
     return tostring(report, "utf-8")
-
