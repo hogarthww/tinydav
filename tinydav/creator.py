@@ -87,7 +87,7 @@ def create_propfind(names=False, properties=None,
             include_element = SubElement(propfind, "include")
             for propname in include:
                 inclprop = SubElement(include_element, propname)
-    return tostring(propfind, "UTF-8")
+    return tostring(propfind, "utf-8")
 
 
 def create_proppatch(setprops, delprops, namespaces=None):
@@ -120,7 +120,7 @@ def create_proppatch(setprops, delprops, namespaces=None):
         prop = SubElement(remove, "prop")
         for propname in delprops:
             prop = SubElement(prop, propname)
-    return tostring(propertyupdate, "UTF-8")
+    return tostring(propertyupdate, "utf-8")
 
 
 def create_lock(scope="exclusive", type_="write", owner=None):
@@ -181,7 +181,7 @@ def create_report_version_tree(properties=None, elements=None, namespaces=None):
     if elements:
         for element in elements:
             report.append(element)
-    return tostring(report, "UTF-8")
+    return tostring(report, "utf-8")
 
 
 def create_report_expand_property(properties=None, elements=None,
@@ -220,5 +220,5 @@ def create_report_expand_property(properties=None, elements=None,
     if elements:
         for element in elements:
             report.append(element)
-    return tostring(report, "UTF-8")
+    return tostring(report, "utf-8")
 
