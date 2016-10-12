@@ -133,10 +133,7 @@ class HTTPResponse(int):
 
     def __repr__(self):
         """Return representation."""
-        if PYTHON2:
-            return "<%s: %d>" % (self.__class__.__name__, self)
-        else:
-            return "<{0}: {1}>".format(self.__class__.__name__, self)
+        return "<{0}: {1:d}>".format(self.__class__.__name__, self)
 
     def __str__(self):
         """Return string representation."""
@@ -236,7 +233,7 @@ class WebDAVResponse(HTTPResponse):
             if PYTHON2:
                 parse_me = StringIO(self.content)
             else:
-                parse_me = BytesIO(self.content)
+                parse_me = BytesIO(self.content.encode('utf-8'))
             self._etree.parse(parse_me)
         except ParseError:
             # get the exception object this way to be compatible with Python
@@ -847,35 +844,21 @@ class HTTPClient(object):
         """
         self.cookie = cookie
 
-    if PYTHON2:
-        def setssl(self, key_file=None, cert_file=None):
-            """Set SSL key file and/or certificate chain file for HTTPS.
+    def setssl(self, key_file=None, cert_file=None):
+        """Set SSL key file and/or certificate chain file for HTTPS.
 
-            Calling this method has the side effect of setting the protocol to
-            https.
+        Calling this method has the side effect of setting the protocol to
+        https.
 
-            key_file -- The name of a PEM formatted file that contains your
-                        private key.
-            cert_file -- PEM formatted certificate chain file (see Python doc
-                         for httplib).
-            """
-            self.key_file = key_file
-            self.cert_file = cert_file
-            if any((key_file, cert_file)):
-                self.protocol = "https"
-    else:
-        def setssl(self, context):
-            """Set SSLContext for this connection.
-
-            Calling this method has the side effect of setting the protocol to
-            https.
-
-            context -- ssl.SSLContext instance describing the various SSL
-                       options.
-
-            """
+        key_file -- The name of a PEM formatted file that contains your
+                    private key.
+        cert_file -- PEM formatted certificate chain file (see Python doc
+                     for httplib).
+        """
+        self.key_file = key_file
+        self.cert_file = cert_file
+        if any((key_file, cert_file)):
             self.protocol = "https"
-            self.context = context
 
     def options(self, uri, headers=None):
         """Make OPTIONS request and return status.

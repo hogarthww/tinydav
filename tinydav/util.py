@@ -118,7 +118,7 @@ class Multipart(object):
 
     def _create_non_file_parts(self):
         items_iterator = self.data.iteritems() if PYTHON2 else self.data.items()
-        for (key, data) in items_iterator:
+        for (key, data) in sorted(items_iterator):
             # Are there explicit encodings/content-types given?
             # Note: Cannot do a (value, encoding) = value here as fileobjects
             # then would get iterated, which is not what we want.
@@ -231,7 +231,7 @@ def make_multipart(content, default_encoding="ascii", with_filenames=False):
     mime = MIMEMultipart("form-data")
     files = list()
     items_iterator = content.iteritems() if PYTHON2 else content.items()
-    for (key, data) in items_iterator:
+    for (key, data) in sorted(items_iterator):
         # Are there explicit encodings/content-types given?
         # Note: Cannot do a (value, encoding) = value here as fileobjects then
         # would get iterated, which is not what we want.
@@ -264,7 +264,7 @@ def make_multipart(content, default_encoding="ascii", with_filenames=False):
         # file, that value can be transferred together using the
         # "multipart/mixed" format.
         mixed = MIMEMultipart("mixed")
-        for filedata in files:
+        for filedata in sorted(files):
             part = create_part(multiple=True, *filedata)
             mixed.attach(part)
         mime.attach(mixed)

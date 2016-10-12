@@ -110,16 +110,16 @@ def create_proppatch(setprops, delprops, namespaces=None):
         set_ = SubElement(propertyupdate, "set")
         prop = SubElement(set_, "prop")
         items_iterator = setprops.iteritems() if PYTHON2 else setprops.items()
-        for (propname, propvalue) in items_iterator:
-            prop = SubElement(prop, propname)
-            prop.text = propvalue
+        for (propname, propvalue) in sorted(items_iterator):
+            _prop = SubElement(prop, propname)
+            _prop.text = propvalue
     # RFC 2518, 12.13.1 set XML element
     # <!ELEMENT remove (prop) >
     if delprops:
         remove = SubElement(propertyupdate, "remove")
         prop = SubElement(remove, "prop")
-        for propname in delprops:
-            prop = SubElement(prop, propname)
+        for propname in sorted(delprops):
+            _prop = SubElement(prop, propname)
     return tostring(propertyupdate, "utf-8")
 
 
@@ -204,12 +204,12 @@ def create_report_expand_property(properties=None, elements=None,
         properties -- string, list or mapping with element-names to attach.
 
         """
-        if isinstance(properties, basestring):
+        if isinstance(properties, STRING_TYPE):
             properties = {properties: None}
         elif not isinstance(properties, Mapping):
             properties = dict.fromkeys(properties, None)
         # recursively attach property-elements to elem
-        for (propname, subprops) in properties.items():
+        for (propname, subprops) in sorted(properties.items()):
             prop = SubElement(elem, "property")
             prop.attrib["name"] = propname
             if subprops:
@@ -218,6 +218,6 @@ def create_report_expand_property(properties=None, elements=None,
     if properties:
         attach_properties(report, properties)
     if elements:
-        for element in elements:
+        for element in sorted(elements):
             report.append(element)
     return tostring(report, "utf-8")

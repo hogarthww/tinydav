@@ -33,15 +33,15 @@ class HTTTPErrorTestCase(unittest.TestCase):
 
     def test_init(self):
         """Test initializing the HTTPError class."""
-        self.assertEqual(self.err.response, self.response)
+        assert self.err.response == self.response
 
     def test_repr(self):
         """Test HTTPError.__repr__."""
-        self.assertEqual(repr(self.err), "<HTTPError: 400>")
+        assert repr(self.err) == "<HTTPError: 400>"
 
     def test_str(self):
         """Test HTTPError.__str__."""
         response = Mock.Response()
         response.statusline = "HTTP/1.1 400 Some error"
         err = HTTPError(response)
-        self.assertEqual(str(err), "HTTP/1.1 400 Some error")
+        assert str(err) == "HTTP/1.1 400 Some error"

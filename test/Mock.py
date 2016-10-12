@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """Mock object for unittests."""
+from __future__ import unicode_literals
 
 from collections import defaultdict
 from contextlib import contextmanager
@@ -105,7 +106,7 @@ class Omnivore(object):
         generator = self.retvals.get(methodname)
         if generator is None:
             return None
-        value = generator.next()
+        value = next(generator)
         if isinstance(value, Exception):
             raise value
         return value
