@@ -42,9 +42,9 @@ CLASSIFIERS = [
 
 if __name__ == "__main__":
     setup(
-        name="tinydav",
+        name="hacked-tinydav",
         packages=["tinydav"],
-        version="0.7.5",
+        version="0.1.0",
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
         author="Manuel Hermann",

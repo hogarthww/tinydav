@@ -3,6 +3,20 @@ Tinydav - WebDAV client libaray
 ===============================
 
 -------------
+Version 0.1.0
+-------------
+BACKWARDS INCOMPATIBLE CHANGES:
+* Rename to hacked-tinydav - hence version number reset
+* No longer quote incoming URIs, caller must quote.
+
+FIXES:
+* Fix tests
+* Make tests Python 3 compat
+
+IMPROVEMENTS:
+* Convert to Pytest / Tox
+
+-------------
 Version 0.7.5
 -------------
 No new featues, no fixes. Just moving from Google Code to Gitlab.
