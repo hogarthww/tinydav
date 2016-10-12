@@ -30,7 +30,6 @@ from functools import partial
 
 if PYTHON2:
     from httplib import MULTI_STATUS, OK, CONFLICT, NO_CONTENT, UNAUTHORIZED
-    from urllib import quote as urllib_quote
     from urllib import urlencode as urllib_urlencode
     from StringIO import StringIO
     import httplib
@@ -39,7 +38,6 @@ else:
     from http.client import UNAUTHORIZED
     from io import BytesIO
     from io import StringIO
-    from urllib.parse import quote as urllib_quote
     from urllib.parse import urlencode as urllib_urlencode
     import base64
     import http.client as httplib
@@ -781,7 +779,10 @@ class HTTPClient(object):
         query -- Mapping with key/value-pairs to be added as query to the URI.
 
         """
-        uri = urllib_quote(uri)
+        # Note(@tomviner): This library used to quote the uri here, but this
+        # is incompatible with pre-incorporated matrix/query paramaters.
+        # Callers must pre-encode their uri with `urllib.quote`
+
         # collect headers
         sendheaders = dict(self.headers)
         if headers:

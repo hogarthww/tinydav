@@ -287,7 +287,7 @@ class HTTPClientTestCase(unittest.TestCase):
         query = {"foo": "bär"}
         http = HTTPClient("127.0.0.1", 80)
         http.setbasicauth("me", "secret")
-        (uri, headers) = http._prepare("/foo bar/baz", headers, query)
+        (uri, headers) = http._prepare("/foo%20bar/baz", headers, query)
         self.assertEqual(uri, "/foo%20bar/baz?foo=b%C3%A4r")
         expect = {
             'Authorization': 'Basic bWU6c2VjcmV0',
@@ -444,7 +444,7 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
 
     def test_preparecopymove(self):
         """Test CoreWebDAVClient._preparecopymove."""
-        source = "/foo bar/baz"
+        source = "/foo%20bar/baz"
         dest = "/dest/in/ation"
         headers = {"X-Test": "Hello"}
         http = CoreWebDAVClient("127.0.0.1", 80)
@@ -462,7 +462,7 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
 
     def test_preparecopymove_col(self):
         """Test CoreWebDAVClient._preparecopymove with collection as source."""
-        source = "/foo bar/baz/"
+        source = "/foo%20bar/baz/"
         dest = "/dest/in/ation"
         headers = {"X-Test": "Hello"}
         http = CoreWebDAVClient("127.0.0.1", 80)
