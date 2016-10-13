@@ -42,7 +42,7 @@ if __name__ == "__main__":
     setup(
         name="hacked-tinydav",
         packages=["tinydav"],
-        version="0.1.0",
+        version='0.2.0',
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
         author="Manuel Hermann",
