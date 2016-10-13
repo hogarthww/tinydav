@@ -55,8 +55,7 @@ Content-Transfer-Encoding: 7bit
 Content-Disposition: form-data; name="b"
 
 bar
---foobar--
-"""
+--foobar--"""
 
 
 MULTI_ISO = """\
@@ -74,8 +73,7 @@ Content-Transfer-Encoding: quoted-printable
 Content-Disposition: form-data; name="b"
 
 =E4=F6=FC=DF
---foobar--
-"""
+--foobar--"""
 
 
 MIME_ISO_EXPLICIT = """\
@@ -93,8 +91,7 @@ Content-Transfer-Encoding: quoted-printable
 Content-Disposition: form-data; name="b"
 
 =E4=F6=FC=DF
---foobar--
-"""
+--foobar--"""
 
 
 MIME_FILE = """\
@@ -112,8 +109,7 @@ Content-Transfer-Encoding: base64
 Content-Disposition: form-data; name="b"
 
 VGhpcyBpcyBhIHRlc3QgZmlsZS4={}
---foobar--
-"""
+--foobar--"""
 
 
 MIME_FILE_EXPLICIT = """\
@@ -131,8 +127,7 @@ Content-Transfer-Encoding: base64
 Content-Disposition: form-data; name="b"
 
 VGhpcyBpcyBhIHRlc3QgZmlsZS4={}
---foobar--
-"""
+--foobar--"""
 
 
 MIME_FILE_NAME = """\
@@ -150,8 +145,7 @@ Content-Transfer-Encoding: base64
 Content-Disposition: form-data; name="b"; filename="test.txt"
 
 VGhpcyBpcyBhIHRlc3QgZmlsZS4={}
---foobar--
-"""
+--foobar--"""
 
 
 MIME_FILES = """\
@@ -180,10 +174,8 @@ Content-Transfer-Encoding: base64
 Content-Disposition: file; name="c"; filename="test2.txt"
 
 VGhpcyBpcyBhbm90aGVyIHRlc3QgZmlsZS4={0}
---foobar-mixed--
-
---foobar--
-"""
+--foobar-mixed--{0}
+--foobar--"""
 
 
 class UtilTestCase(unittest.TestCase):
@@ -295,7 +287,9 @@ class UtilTestCase(unittest.TestCase):
             (headers, multi) = util.make_multipart(content)
             assert headers["Content-Type"] == \
                 'multipart/form-data; boundary="foobar"'
-            assert multi == MULTI
+            assert multi.strip() == MULTI
+
+    def test_make_multipart_iso(self):
         # form-data with iso-8859-1
         context = dict(MIMEMultipart=Mock.FakeMIMEMultipart())
         with injected(util.make_multipart, **context):
@@ -303,7 +297,9 @@ class UtilTestCase(unittest.TestCase):
             (headers, multi) = util.make_multipart(content, "iso-8859-1")
             assert headers["Content-Type"] == \
                 'multipart/form-data; boundary="foobar"'
-            assert multi == MULTI_ISO
+            assert multi.strip() == MULTI_ISO
+
+    def test_make_multipart_iso_explicit(self):
         # form-data with explicit iso-8859-1
         context = dict(MIMEMultipart=Mock.FakeMIMEMultipart())
         with injected(util.make_multipart, **context):
@@ -311,7 +307,9 @@ class UtilTestCase(unittest.TestCase):
             (headers, multi) = util.make_multipart(content)
             assert headers["Content-Type"] == \
                 'multipart/form-data; boundary="foobar"'
-            assert multi == MIME_ISO_EXPLICIT
+            assert multi.strip() == MIME_ISO_EXPLICIT
+
+    def test_make_multipart_file(self):
         # post one file
         sio = StringIO("This is a test file.")
         context = dict(MIMEMultipart=Mock.FakeMIMEMultipart())
@@ -320,7 +318,9 @@ class UtilTestCase(unittest.TestCase):
             (headers, multi) = util.make_multipart(content)
             assert headers["Content-Type"] == \
                 'multipart/form-data; boundary="foobar"'
-            assert multi == MIME_FILE.format(newline_if_py3)
+            assert multi.strip() == MIME_FILE.format(newline_if_py3)
+
+    def test_make_multipart_file_name(self):
         # post one file with filename
         sio = StringIO("This is a test file.")
         sio.name = "test.txt"
@@ -331,7 +331,9 @@ class UtilTestCase(unittest.TestCase):
                 content, with_filenames=True)
             assert headers["Content-Type"] == \
                 'multipart/form-data; boundary="foobar"'
-            assert multi == MIME_FILE_NAME.format(newline_if_py3)
+            assert multi.strip() == MIME_FILE_NAME.format(newline_if_py3)
+
+    def test_make_multipart_file_explicit(self):
         # post one file with explicit content-type
         sio = StringIO("This is a test file.")
         context = dict(MIMEMultipart=Mock.FakeMIMEMultipart())
@@ -340,7 +342,9 @@ class UtilTestCase(unittest.TestCase):
             (headers, multi) = util.make_multipart(content)
             assert headers["Content-Type"] == \
                 'multipart/form-data; boundary="foobar"'
-            assert multi == MIME_FILE_EXPLICIT.format(newline_if_py3)
+            assert multi.strip() == MIME_FILE_EXPLICIT.format(newline_if_py3)
+
+    def test_make_multipart_files(self):
         # post two files, one with filename
         sio = StringIO("This is a test file.")
         sio2 = StringIO("This is another test file.")
@@ -352,4 +356,4 @@ class UtilTestCase(unittest.TestCase):
                 content, with_filenames=True)
             assert headers["Content-Type"] == \
                 'multipart/form-data; boundary="foobar"'
-            assert multi == MIME_FILES.format(newline_if_py3)
+            assert multi.strip() == MIME_FILES.format(newline_if_py3)

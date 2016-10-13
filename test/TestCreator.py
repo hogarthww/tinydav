@@ -54,19 +54,19 @@ class TestCreatePropFind(unittest.TestCase):
         xml = creator.create_propfind(False, ["{DC:}author"], None, None)
         if PYTHONVERSION >= (2, 7):
             assert xml == b'<propfind xmlns:ns0="DC:" ' \
-                                  b'xmlns="DAV:"><prop>' \
-                                  b'<ns0:author /></prop>' \
-                                  b'</propfind>'
+                b'xmlns="DAV:"><prop>' \
+                b'<ns0:author /></prop>' \
+                b'</propfind>'
         else:
             assert xml == b'<propfind xmlns="DAV:"><prop>' \
-                                  b'<ns0:author xmlns:ns0="DC:" /></prop>' \
-                                  b'</propfind>'
+                b'<ns0:author xmlns:ns0="DC:" /></prop>' \
+                b'</propfind>'
         # include
         xml = creator.create_propfind(False, None,
                                       ["supported-report-set"], None)
         assert xml == b'<propfind xmlns="DAV:"><allprop />' \
-                              b'<include><supported-report-set /></include>' \
-                              b'</propfind>'
+            b'<include><supported-report-set /></include>' \
+            b'</propfind>'
 
 
 class TestCreatePropPatch(unittest.TestCase):
@@ -81,8 +81,8 @@ class TestCreatePropPatch(unittest.TestCase):
         assert xml == b'<propertyupdate xmlns="DAV:" xmlns:CADN="CADN:">' \
                       b'<set>' \
                       b'<prop>' \
-                          b'<CADN:author>me</CADN:author>' \
-                          b'<CADN:created>2009-09-09 13:31</CADN:created>' \
+            b'<CADN:author>me</CADN:author>' \
+            b'<CADN:created>2009-09-09 13:31</CADN:created>' \
                       b'</prop>' \
                       b'</set>' \
                       b'</propertyupdate>'
@@ -95,10 +95,10 @@ class TestCreatePropPatch(unittest.TestCase):
         xml = creator.create_proppatch(None, delprops, ns)
 
         assert xml == b'<propertyupdate xmlns="DAV:" xmlns:DEL="DEL:">' \
-                              b'<remove>' \
-                              b'<prop><DEL:xxx /></prop>' \
-                              b'</remove>' \
-                              b'</propertyupdate>'
+            b'<remove>' \
+            b'<prop><DEL:xxx /></prop>' \
+            b'</remove>' \
+            b'</propertyupdate>'
 
     def test_create_proppatch_setremove(self):
         """Test WebDAVClient._create_proppatch: set and remove property"""
@@ -108,18 +108,18 @@ class TestCreatePropPatch(unittest.TestCase):
         ns = {"CADN": "CADN:", "DEL": "DEL:"}
         xml = creator.create_proppatch(setprops, delprops, ns)
         assert xml == b'<propertyupdate xmlns="DAV:" xmlns:CADN="CADN:"' \
-                              b' xmlns:DEL="DEL:">' \
-                              b'<set>' \
-                              b'<prop>' \
-                              b'<CADN:author>me</CADN:author>' \
-                              b'<CADN:created>2009-09-09 13:31' \
-                              b'</CADN:created>' \
-                              b'</prop>' \
-                              b'</set>' \
-                              b'<remove>' \
-                              b'<prop><DEL:xxx /></prop>' \
-                              b'</remove>' \
-                              b'</propertyupdate>'
+            b' xmlns:DEL="DEL:">' \
+            b'<set>' \
+            b'<prop>' \
+            b'<CADN:author>me</CADN:author>' \
+            b'<CADN:created>2009-09-09 13:31' \
+            b'</CADN:created>' \
+            b'</prop>' \
+            b'</set>' \
+            b'<remove>' \
+            b'<prop><DEL:xxx /></prop>' \
+            b'</remove>' \
+            b'</propertyupdate>'
 
 
 class TestCreateLock(unittest.TestCase):
@@ -129,21 +129,21 @@ class TestCreateLock(unittest.TestCase):
         """Test creator.create_lock."""
         xml = creator.create_lock()
         assert xml == b'<lockinfo xmlns="DAV:"><lockscope>' \
-                              b'<exclusive /></lockscope><locktype><write />' \
-                              b'</locktype></lockinfo>'
+            b'<exclusive /></lockscope><locktype><write />' \
+            b'</locktype></lockinfo>'
 
     def test_create_illegal_scope(self):
         """Test creator.create_lock with illegal scope."""
         with pytest.raises(
-            ValueError):
+                ValueError):
             creator.create_lock(scope="everything")
 
     def test_create_lock_owner(self):
         """Test creator.create_lock with given owner."""
         xml = creator.create_lock(owner="me")
         assert xml == b'<lockinfo xmlns="DAV:"><lockscope><exclusive />' \
-                              b'</lockscope><locktype><write /></locktype>' \
-                              b'<owner>me</owner></lockinfo>'
+            b'</lockscope><locktype><write /></locktype>' \
+            b'<owner>me</owner></lockinfo>'
 
     def test_create_lock_owner_element(self):
         """Test creator.create_lock with given owner element."""
@@ -151,8 +151,8 @@ class TestCreateLock(unittest.TestCase):
         owner.text = "me"
         xml = creator.create_lock(owner=owner)
         assert xml == b'<lockinfo xmlns="DAV:"><lockscope><exclusive />' \
-                              b'</lockscope><locktype><write /></locktype>' \
-                              b'<owner><name>me</name></owner></lockinfo>'
+            b'</lockscope><locktype><write /></locktype>' \
+            b'<owner><name>me</name></owner></lockinfo>'
 
 
 class TestCreateReport(unittest.TestCase):
@@ -166,8 +166,8 @@ class TestCreateReport(unittest.TestCase):
         # properties
         xml = creator.create_report_version_tree(["creator-displayname"])
         assert xml == b'<version-tree xmlns="DAV:"><prop>' \
-                              b'<creator-displayname />' \
-                              b'</prop></version-tree>'
+            b'<creator-displayname />' \
+            b'</prop></version-tree>'
         # additional xml
         elements = [Element("foo", {"bar": "1"})]
         xml = creator.create_report_version_tree(elements=elements)
@@ -182,15 +182,15 @@ class TestCreateReport(unittest.TestCase):
         # properties
         xml = creator.create_report_expand_property("creator-displayname")
         assert xml == b'<expand-property xmlns="DAV:">' \
-                              b'<property name="creator-displayname" />' \
-                              b'</expand-property>'
+            b'<property name="creator-displayname" />' \
+            b'</expand-property>'
         # property-list
         p = ["foo", "bar"]
         xml = creator.create_report_expand_property(p)
         assert xml == b'<expand-property xmlns="DAV:">' \
-                              b'<property name="bar" />' \
-                              b'<property name="foo" />' \
-                              b'</expand-property>'
+            b'<property name="bar" />' \
+            b'<property name="foo" />' \
+            b'</expand-property>'
         # property-dict
         p = {
             "foo": "bar",
@@ -202,22 +202,22 @@ class TestCreateReport(unittest.TestCase):
         }
         xml = creator.create_report_expand_property(p)
         assert xml == b'<expand-property xmlns="DAV:">' \
-                          b'<property name="bar">' \
-                            b'<property name="a" />' \
-                            b'<property name="b" />' \
-                          b'</property>' \
-                          b'<property name="baz">' \
-                            b'<property name="c" />' \
-                            b'<property name="d">' \
-                                b'<property name="e" />' \
-                            b'</property>' \
-                          b'</property>' \
-                          b'<property name="foo">' \
-                            b'<property name="bar" />' \
-                          b'</property>' \
+            b'<property name="bar">' \
+            b'<property name="a" />' \
+            b'<property name="b" />' \
+            b'</property>' \
+            b'<property name="baz">' \
+            b'<property name="c" />' \
+            b'<property name="d">' \
+            b'<property name="e" />' \
+            b'</property>' \
+            b'</property>' \
+            b'<property name="foo">' \
+            b'<property name="bar" />' \
+            b'</property>' \
                       b'</expand-property>'
         # additional xml
         elements = [Element("foo", {"bar": "1"})]
         xml = creator.create_report_expand_property(elements=elements)
         assert xml == b'<expand-property xmlns="DAV:">' \
-                              b'<foo bar="1" /></expand-property>'
+            b'<foo bar="1" /></expand-property>'

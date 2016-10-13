@@ -493,7 +493,7 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
         http = CoreWebDAVClient("127.0.0.1", 80)
         http.setbasicauth(b"me", b"secret")
         with pytest.raises(
-            ValueError):
+                ValueError):
             http._preparecopymove(source, dest, "1", False, headers)
 
     def test_mkcol(self):
@@ -604,7 +604,7 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
         source = "/foo bar/baz/"
         dest = "/dest/in/ation"
         with pytest.raises(
-            ValueError):
+                ValueError):
             self.dav.move(source, dest, 0)
 
     def test_lock(self):
@@ -629,16 +629,16 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
     def test_lock_timeout_toolong(self):
         """Test CoreWebDAVClient.lock with too long timeout."""
         with pytest.raises(
-            ValueError):
+                ValueError):
             self.dav.lock("/foo",
-            timeout=4294967296)
+                          timeout=4294967296)
 
     def test_lock_timeout_err(self):
         """Test CoreWebDAVClient.lock with wrong timeout."""
         with pytest.raises(
-            ValueError):
+                ValueError):
             self.dav.lock("/foo",
-            timeout="abc")
+                          timeout="abc")
 
     def test_lock_depth(self):
         """Test CoreWebDAVClient.lock with given depth."""
@@ -650,9 +650,9 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
     def test_lock_illegaldepth(self):
         """Test CoreWebDAVClient.lock with given illegal depth."""
         with pytest.raises(
-            ValueError):
+                ValueError):
             self.dav.lock("/foo",
-            depth=1)
+                          depth=1)
 
     def test_unlock_lock(self):
         """Test CoreWebDAVClient.unlock with lock object."""
@@ -661,7 +661,7 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
         self.dav.unlock(self.lock)
         assert self.con.method == "UNLOCK"
         assert self.con.headers["Lock-Token"] == \
-                         "<%s>" % self.lock.locktokens[0]
+            "<%s>" % self.lock.locktokens[0]
         assert self.lock._tag not in self.dav.locks
 
     def test_unlock_uri(self):
@@ -671,7 +671,7 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
         self.dav.unlock("/")
         assert self.con.method == "UNLOCK"
         assert self.con.headers["Lock-Token"] == \
-                         "<%s>" % self.lock.locktokens[0]
+            "<%s>" % self.lock.locktokens[0]
         assert self.lock._tag not in self.dav.locks
 
     def test_unlock_uri_no_token(self):
@@ -686,7 +686,7 @@ class CoreWebDAVClientTestCase(unittest.TestCase):
         self.dav.unlock(self.lock)
         assert self.con.method == "UNLOCK"
         assert self.con.headers["Lock-Token"] == \
-                         "<%s>" % self.lock.locktokens[0]
+            "<%s>" % self.lock.locktokens[0]
         assert self.lock._tag not in self.dav.locks
 
 
@@ -734,9 +734,9 @@ class ExtendedWebDAVClientTestCase(unittest.TestCase):
         """Test ExtendedWebDAVClient.version_tree_report with illegal depth."""
         # prepare mock connection
         with pytest.raises(
-            ValueError):
+                ValueError):
             self.dav.version_tree_report("/foo.html",
-            "ABC")
+                                         "ABC")
 
     def test_expand_property_report(self):
         """Test ExtendedWebDAVClient.expand_property_report."""
@@ -769,9 +769,9 @@ class ExtendedWebDAVClientTestCase(unittest.TestCase):
         """Test ExtendedWebDAVClient.expand_property_report with illegal depth."""
         # prepare mock connection
         with pytest.raises(
-            ValueError):
+                ValueError):
             self.dav.expand_property_report("/foo.html",
-            "ABC")
+                                            "ABC")
 
 
 class HTTPResponseTestCase(unittest.TestCase):
@@ -796,10 +796,10 @@ class HTTPResponseTestCase(unittest.TestCase):
         """Test Initializing the HTTPResponse."""
         assert self.httpresponse.content == MULTISTATUS
         assert self.httpresponse.statusline == \
-                         "HTTP/1.1 207 The reason"
+            "HTTP/1.1 207 The reason"
         assert self.httpresponse401.content == ""
         assert self.httpresponse401.statusline == \
-                         "HTTP/1.1 401 The reason"
+            "HTTP/1.1 401 The reason"
         assert self.httpresponse401.schema == "Digest"
         assert self.httpresponse401.realm == "restricted"
         assert self.httpresponse401.domain == "foo.de"
@@ -1071,7 +1071,7 @@ class MultiStatusResponseTestCase(unittest.TestCase):
     def test_href(self):
         """Test MultiStatusResponse.href property."""
         assert self.msr.href == \
-                         "/3/38/38f/38fa476aa97a4b2baeb41a481fdca00b"
+            "/3/38/38f/38fa476aa97a4b2baeb41a481fdca00b"
 
     def test_namespaces(self):
         """Test MultiStatusResponse.namespaces property."""
