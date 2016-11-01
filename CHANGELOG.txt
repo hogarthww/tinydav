@@ -2,7 +2,8 @@
 0.2.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Rename package to tinydav-fork.
+- Add license note.
 
 
 0.2.0 (2016-10-13)
@@ -12,7 +13,7 @@
 Version 0.1.0
 -------------
 BACKWARDS INCOMPATIBLE CHANGES:
-* Rename to hacked-tinydav - hence version number reset
+* Rename package - hence version number reset
 * No longer quote incoming URIs, caller must quote.
 
 FIXES:

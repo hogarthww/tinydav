@@ -40,7 +40,7 @@ CLASSIFIERS = [
 
 if __name__ == "__main__":
     setup(
-        name="hacked-tinydav",
+        name="tinydav-fork",
         packages=["tinydav"],
         version='0.2.1.dev0',
         description=DESCRIPTION,
