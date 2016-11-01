@@ -42,7 +42,7 @@ if __name__ == "__main__":
     setup(
         name="tinydav-fork",
         packages=["tinydav"],
-        version='0.2.1',
+        version='0.2.2.dev0',
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
         author="Manuel Hermann",
