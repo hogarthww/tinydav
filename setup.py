@@ -2,17 +2,16 @@
 # coding: utf-8
 #
 # Copyright (C) 2009  Manuel Hermann <manuel-hermann@gmx.net>
-from distutils.core import setup
+from setuptools import setup
 
-import tinydav
-
-VERSION = tinydav.__version__
 DESCRIPTION = "An easy-to-use HTTP and WebDAV client library."
 LONG_DESCRIPTION = """\
 An easy-to-use HTML and WebDAV client library for Python
 --------------------------------------------------------
 
-This is a small library for contacting HTTP and WebDAV servers. Goal of this project until version 1.0 is supporting all WebDAV methods including the versioning extensions from RFC 3253).
+This is a small library for contacting HTTP and WebDAV servers. Goal of this
+ project until version 1.0 is supporting all WebDAV methods including the
+ versioning extensions from RFC 3253).
 
 Features:
  - HTTP methods OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT.
@@ -27,8 +26,6 @@ This version requires Python 2.5 or later (including Python 3.)
 
 CLASSIFIERS = [
     "Programming Language :: Python",
-    "Programming Language :: Python :: 2.5",
-    "Programming Language :: Python :: 2.6",
     "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
     "Development Status :: 4 - Beta",
@@ -43,17 +40,16 @@ CLASSIFIERS = [
 
 if __name__ == "__main__":
     setup(
-        name="tinydav",
+        name="hacked-tinydav",
         packages=["tinydav"],
-        version=VERSION,
+        version='0.2.1.dev0',
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
         author="Manuel Hermann",
         author_email="manuel-hermann@gmx.net",
         url="https://gitlab.helduel.de/open-source/tinydav",
-        keywords = ["webdav", "https", "http", "library", "client", "lgpl",
-                    "rfc2518", "rfc2068", "rfc3253"],
+        keywords=["webdav", "https", "http", "library", "client", "lgpl",
+                  "rfc2518", "rfc2068", "rfc3253"],
         license="LGPL",
         classifiers=CLASSIFIERS,
     )
-

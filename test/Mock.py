@@ -16,13 +16,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """Mock object for unittests."""
+from __future__ import unicode_literals
 
 from collections import defaultdict
 from contextlib import contextmanager
 from email.mime.multipart import MIMEMultipart
 from functools import partial
-from StringIO import StringIO
-import urllib2
 
 
 @contextmanager
@@ -32,7 +31,10 @@ def injected(func, **kwargs):
     if hasattr(func, "im_func"):
         func = func.im_func
     # save and replace current function globals as to kwargs
-    func_globals = func.func_globals
+    try:
+        func_globals = func.func_globals
+    except AttributeError:
+        func_globals = func.__globals__
     saved = dict((k, func_globals[k]) for k in kwargs if k in func_globals)
     func_globals.update(kwargs)
     # context is now ready to be used
@@ -46,12 +48,12 @@ def replaced(obj, **attrs):
     """Replace attribute in object while in context mode."""
     # save and replace current attributes
     saved = dict((k, getattr(obj, k)) for k in attrs)
-    for (name, attr) in attrs.iteritems():
+    for (name, attr) in attrs.items():
         setattr(obj, name, attr)
     # context is ready
     yield
     # restore previous state
-    for (name, attr) in saved.iteritems():
+    for (name, attr) in saved.items():
         setattr(obj, name, attr)
 
 
@@ -88,7 +90,7 @@ class Omnivore(object):
         """
         self.__name__ = "Omnivore"
         self.retvals = dict()
-        for (key, value) in kwargs.iteritems():
+        for (key, value) in kwargs.items():
             self.retvals[key] = iter(value)
         self.called = defaultdict(list)
 
@@ -96,7 +98,7 @@ class Omnivore(object):
         self.called["__enter__"] = True
         return self
 
-    def __exit__(exctype, excvalue, exctb):
+    def __exit__(self, exctype, excvalue, exctb):
         self.called["__exit__"] = (exctype, excvalue, exctb)
 
     def method(self, methodname, *args, **kwargs):
@@ -104,7 +106,7 @@ class Omnivore(object):
         generator = self.retvals.get(methodname)
         if generator is None:
             return None
-        value = generator.next()
+        value = next(generator)
         if isinstance(value, Exception):
             raise value
         return value
@@ -118,6 +120,7 @@ class Omnivore(object):
 
 class FakeMIMEMultipart(object):
     """Subclass of MIMEMultipart."""
+
     def __init__(self, boundary="foobar"):
         self.boundary = boundary
 
@@ -170,7 +173,7 @@ class ModuleProxy(object):
         return getattr(self.__module, name)
 
 
-class Response(urllib2.HTTPError):
+class Response(object):
     """Mock urllib2 response object."""
 
     def __init__(self):
@@ -186,4 +189,3 @@ class Response(urllib2.HTTPError):
 
     def read(self):
         return self.content
-

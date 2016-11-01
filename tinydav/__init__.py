@@ -26,11 +26,10 @@ PYTHON3 = (sys.version_info >= (3, 0))
 
 from contextlib import closing
 from email.header import Header
-from functools import wraps, partial
+from functools import partial
 
 if PYTHON2:
     from httplib import MULTI_STATUS, OK, CONFLICT, NO_CONTENT, UNAUTHORIZED
-    from urllib import quote as urllib_quote
     from urllib import urlencode as urllib_urlencode
     from StringIO import StringIO
     import httplib
@@ -39,12 +38,11 @@ else:
     from http.client import UNAUTHORIZED
     from io import BytesIO
     from io import StringIO
-    from urllib.parse import quote as urllib_quote
     from urllib.parse import urlencode as urllib_urlencode
     import base64
     import http.client as httplib
 
-from xml.etree.ElementTree import ElementTree, Element, SubElement, tostring
+from xml.etree.ElementTree import ElementTree
 
 if PYTHON2_7 or PYTHON3:
     from xml.etree.ElementTree import ParseError
@@ -62,9 +60,6 @@ else:
 from tinydav import creator, util
 from tinydav.exception import HTTPError, HTTPUserError, HTTPServerError
 
-__author__ = "Manuel Hermann <manuel-hermann@gmx.net>"
-__license__ = "LGPL"
-__version__ = "0.7.5"
 
 __all__ = (
     "HTTPError", "HTTPUserError", "HTTPServerError",
@@ -73,7 +68,7 @@ __all__ = (
 
 # RFC 2518, 9.8 Timeout Request Header
 # The timeout value for TimeType "Second" MUST NOT be greater than 2^32-1.
-MAX_TIMEOUT = 2**32-1
+MAX_TIMEOUT = 2**32 - 1
 
 ACTIVELOCK = "./{DAV:}lockdiscovery/{DAV:}activelock"
 
@@ -124,7 +119,7 @@ class HTTPResponse(int):
     def __init__(self, response):
         """Initialize the HTTPResponse.
 
-        response -- The original httplib.HTTPResponse object. 
+        response -- The original httplib.HTTPResponse object.
 
         """
         self.response = response
@@ -132,16 +127,13 @@ class HTTPResponse(int):
         self.content = response.read()
         version = "HTTP/%s.%s" % tuple(str(response.version))
         self.statusline = "%s %d %s"\
-                        % (version, response.status, response.reason)
+            % (version, response.status, response.reason)
         if self == UNAUTHORIZED:
             self._setauth()
 
     def __repr__(self):
         """Return representation."""
-        if PYTHON2:
-            return "<%s: %d>" % (self.__class__.__name__, self)
-        else:
-            return "<{0}: {1}>".format(self.__class__.__name__, self)
+        return "<{0}: {1:d}>".format(self.__class__.__name__, self)
 
     def __str__(self):
         """Return string representation."""
@@ -182,15 +174,16 @@ class WebDAVResponse(HTTPResponse):
     object per result. If it was no multi-status response, the iterator will
     just yield this WebDAVResponse object.
 
-    The length of a WebDAVResponse object is 1, except for multi-status 
+    The length of a WebDAVResponse object is 1, except for multi-status
     responses. The length will then be the number of results in the
     multi-status.
 
     """
+
     def __init__(self, response):
         """Initialize the WebDAVResponse.
 
-        response -- The original httplib.HTTPResponse object. 
+        response -- The original httplib.HTTPResponse object.
 
         """
         super(WebDAVResponse, self).__init__(response)
@@ -232,7 +225,7 @@ class WebDAVResponse(HTTPResponse):
     def _parse_xml_content(self):
         """Parse the XML content.
 
-        If the response content cannot be parsed as XML content, 
+        If the response content cannot be parsed as XML content,
         <root><empty/></root> will be taken as content instead.
 
         """
@@ -240,7 +233,7 @@ class WebDAVResponse(HTTPResponse):
             if PYTHON2:
                 parse_me = StringIO(self.content)
             else:
-                parse_me = BytesIO(self.content)
+                parse_me = BytesIO(self.content.encode('utf-8'))
             self._etree.parse(parse_me)
         except ParseError:
             # get the exception object this way to be compatible with Python
@@ -258,7 +251,7 @@ class WebDAVResponse(HTTPResponse):
 class WebDAVLockResponse(WebDAVResponse):
     """Result from WebDAV LOCK request.
 
-    A WebDAVLockResponse object is a subclass of WebDAVResponse which is a 
+    A WebDAVLockResponse object is a subclass of WebDAVResponse which is a
     subclass of int. The int value of such an object is the HTTP status number
     from the response.
 
@@ -283,7 +276,7 @@ class WebDAVLockResponse(WebDAVResponse):
     object per result. If it was no multi-status response, the iterator will
     just yield this WebDAVLockResponse object.
 
-    The length of a WebDAVLockResponse object is 1, except for multi-status 
+    The length of a WebDAVLockResponse object is 1, except for multi-status
     responses. The length will then be the number of results in the
     multi-status.
 
@@ -292,21 +285,21 @@ class WebDAVLockResponse(WebDAVResponse):
 
     >>> lock = dav.lock("somewhere")
     >>> with lock:
-    >>>    dav.put("somwhere", <something>)
+    >>>    dav.put("somewhere", <something>)
 
     The above example will make a tagged PUT request. For untagged requests do:
 
     >>> lock = dav.lock("somewhere")
     >>> with lock(False):
-    >>>    dav.put("somwhere", <something>)
+    >>>    dav.put("somewhere", <something>)
 
     """
     def __new__(cls, client, uri, response):
         """Construct WebDAVLockResponse.
-        
+
         client -- HTTPClient instance or one of its subclasses.
         uri -- The called uri.
-        response --The original httplib.HTTPResponse object. 
+        response --The original httplib.HTTPResponse object.
 
         """
         return WebDAVResponse.__new__(cls, response)
@@ -464,7 +457,7 @@ class MultiStatusResponse(int):
     A MultiStatusResponse object is a subclass of int. The int value of such an
     object is the HTTP status number from the response.
 
-    Furthermore this object implements the dictionary interface. Through it 
+    Furthermore this object implements the dictionary interface. Through it
     you can access all properties that the resource has.
 
     This object has the following attributes:
@@ -583,7 +576,7 @@ class MultiStatusResponse(int):
         default -- Return this value when key does not exist.
         namespace -- The namespace in which the property lives in. Must be
                      given, when the key value has no namespace defined and
-                     the namespace ist not DAV:.
+                     the namespace is not DAV:.
 
         """
         if namespace:
@@ -777,13 +770,16 @@ class HTTPClient(object):
 
         uri -- URI the request is for.
         headers -- Mapping with additional headers to send. Unicode values that
-                   are no ASCII will be MIME-encoded with UTF-8. Set 
+                   are no ASCII will be MIME-encoded with UTF-8. Set
                    tinydav.default_header_encoding to another encoding, if
                    UTF-8 doesn't suit you.
         query -- Mapping with key/value-pairs to be added as query to the URI.
 
         """
-        uri = urllib_quote(uri)
+        # Note(@tomviner): This library used to quote the uri here, but this
+        # is incompatible with pre-incorporated matrix/query paramaters.
+        # Callers must pre-encode their uri with `urllib.quote`
+
         # collect headers
         sendheaders = dict(self.headers)
         if headers:
@@ -825,7 +821,7 @@ class HTTPClient(object):
 
             user -- Username as bytes string.
             password -- Password for user as bytes.
-            encoder -- Base64 encoder function. Default is the standard 
+            encoder -- Base64 encoder function. Default is the standard
                        encoder. Should not be changed.
 
             """
@@ -848,35 +844,21 @@ class HTTPClient(object):
         """
         self.cookie = cookie
 
-    if PYTHON2:
-        def setssl(self, key_file=None, cert_file=None):
-            """Set SSL key file and/or certificate chain file for HTTPS.
+    def setssl(self, key_file=None, cert_file=None):
+        """Set SSL key file and/or certificate chain file for HTTPS.
 
-            Calling this method has the side effect of setting the protocol to
-            https.
+        Calling this method has the side effect of setting the protocol to
+        https.
 
-            key_file -- The name of a PEM formatted file that contains your
-                        private key.
-            cert_file -- PEM formatted certificate chain file (see Python doc
-                         for httplib).
-            """
-            self.key_file = key_file
-            self.cert_file = cert_file
-            if any((key_file, cert_file)):
-                self.protocol = "https"
-    else:
-        def setssl(self, context):
-            """Set SSLContext for this connection.
-
-            Calling this method has the side effect of setting the protocol to
-            https.
-
-            context -- ssl.SSLContext instance describing the various SSL
-                       options.
-
-            """
+        key_file -- The name of a PEM formatted file that contains your
+                    private key.
+        cert_file -- PEM formatted certificate chain file (see Python doc
+                     for httplib).
+        """
+        self.key_file = key_file
+        self.cert_file = cert_file
+        if any((key_file, cert_file)):
             self.protocol = "https"
-            self.context = context
 
     def options(self, uri, headers=None):
         """Make OPTIONS request and return status.
@@ -930,17 +912,17 @@ class HTTPClient(object):
         headers -- If given, must be a mapping with headers to set.
         query -- Mapping with key/value-pairs to be added as query to the URI.
         as_multipart -- Send post data as multipart/form-data. content must be
-                        a dict, then. If content is not a dict, then this 
+                        a dict, then. If content is not a dict, then this
                         argument will be ignored. The values of the dict may be
                         a subclass of email.mime.base.MIMEBase, which will be
                         attached to the multipart as is, a 2-tuple containing
                         the actual value (or file-like object) and an encoding
-                        for this value (or the content-type in case of a 
+                        for this value (or the content-type in case of a
                         file-like object).
         encoding -- Send multipart content with this encoding. Default is
                     ASCII.
         with_filenames -- If True, a multipart's files will be sent with the
-                          filename paramenter set. Default is False.
+                          filename parameter set. Default is False.
 
         Raise HTTPUserError on 4xx HTTP status codes.
         Raise HTTPServerError on 5xx HTTP status codes.
@@ -957,7 +939,7 @@ class HTTPClient(object):
                 headers["content-type"] = "application/x-www-form-urlencoded"
                 content = urllib_urlencode(content)
         if hasattr(content, "read") and not PYTHON2_6:
-            # python 2.5 httlib cannot handle file-like objects
+            # python 2.5 httplib cannot handle file-like objects
             content = content.read()
         return self._request("POST", uri, content, headers)
 
@@ -1004,7 +986,7 @@ class HTTPClient(object):
                stated in RFC2616, section 14.45.
         headers -- If given, must be a mapping with headers to set.
 
-        Raise ValueError, if maxforward is not an int or convertable to
+        Raise ValueError, if maxforward is not an int or convertible to
         an int.
         Raise TypeError, if via is not an iterable of string.
         Raise HTTPUserError on 4xx HTTP status codes.
@@ -1123,7 +1105,7 @@ class CoreWebDAVClient(HTTPClient):
         """Make PROPFIND request and return status.
 
         uri -- Path for PROPFIND.
-        depth -- Depth for PROFIND request. Default is zero.
+        depth -- Depth for PROPFIND request. Default is zero.
         names -- If True, only the available namespace names are returned.
         properties -- If given, an iterable with all requested properties is
                       expected.
@@ -1207,7 +1189,7 @@ class CoreWebDAVClient(HTTPClient):
         destination -- Path of destination to copy source to.
         depth -- Either 0 or "infinity". Default is the latter.
         overwrite -- If not None, then a boolean indicating whether the
-                     Overwrite header ist set to "T" (True) or "F" (False).
+                     Overwrite header is set to "T" (True) or "F" (False).
         headers -- If given, must be a mapping with headers to set.
 
         Raise HTTPUserError on 4xx HTTP status codes.
@@ -1226,7 +1208,7 @@ class CoreWebDAVClient(HTTPClient):
         destination -- Path of destination to move source to.
         depth -- Either 0 or "infinity". Default is the latter.
         overwrite -- If not None, then a boolean indicating whether the
-                     Overwrite header ist set to "T" (True) or "F" (False).
+                     Overwrite header is set to "T" (True) or "F" (False).
         headers -- If given, must be a mapping with headers to set.
 
         Raise ValueError, if an illegal depth was given.
@@ -1270,7 +1252,7 @@ class CoreWebDAVClient(HTTPClient):
         if timeout is not None:
             try:
                 timeout = int(timeout)
-            except ValueError: # no number
+            except ValueError:  # no number
                 if timeout.lower() == "infinite":
                     value = "Infinite"
                 else:
@@ -1343,6 +1325,7 @@ class CoreWebDAVClient(HTTPClient):
 
 class ExtendedWebDAVClient(CoreWebDAVClient):
     """WebDAV client with versioning extensions (RFC 3253)."""
+
     def __report(self, uri, depth, content, headers):
         depth = util.get_depth(depth)
         (uri, headers) = self._prepare(uri, headers)

@@ -20,7 +20,6 @@ import sys
 PYTHON2 = ((2, 5) <= sys.version_info <= (3, 0))
 
 from email.encoders import encode_base64
-from email.mime.application import MIMEApplication
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -57,10 +56,11 @@ DEFAULT_CONTENT_TYPE = "application/octet-stream"
 
 class FakeHTTPRequest(object):
     """Fake HTTP request object needed for cookies.
-    
+
     See http://docs.python.org/library/cookielib.html#cookiejar-and-filecookiejar-objects
 
     """
+
     def __init__(self, client, uri, headers):
         """Initialize the fake HTTP request object.
 
@@ -108,6 +108,7 @@ def make_absolute(httpclient, uri):
 
 
 class Multipart(object):
+
     def __init__(self, data, default_encoding="ascii", with_filenames=False):
         self.data = data
         self.default_encoding = default_encoding
@@ -117,9 +118,9 @@ class Multipart(object):
 
     def _create_non_file_parts(self):
         items_iterator = self.data.iteritems() if PYTHON2 else self.data.items()
-        for (key, data) in items_iterator:
+        for (key, data) in sorted(items_iterator):
             # Are there explicit encodings/content-types given?
-            # Note: Cannot do a (value, encoding) = value here as fileobjects 
+            # Note: Cannot do a (value, encoding) = value here as fileobjects
             # then would get iterated, which is not what we want.
             if isinstance(data, tuple) and (len(data) == 2):
                 (value, encoding) = data
@@ -133,9 +134,9 @@ class Multipart(object):
                 if isinstance(value, MIMEBase):
                     part = value
                 else:
-                    encoding = encoding if encoding else default_encoding
+                    encoding = encoding if encoding else self.default_encoding
                     part = MIMEText(value, "plain", encoding)
-                add_disposition(part, key)
+                self._add_disposition(part, key)
                 self._mp.attach(part)
 
     def _add_disposition(self, part, name, filename=None,
@@ -157,7 +158,7 @@ class Multipart(object):
         if self.with_filenames and (filename is not None):
             # RFC 2388 Returning Values from Forms: multipart/form-data
             # The original local file name may be supplied as well, either as
-            # a "filename" parameter either of the "content-disposition: 
+            # a "filename" parameter either of the "content-disposition:
             # form-data" header or, in the case of multiple files, in a
             # "content-disposition: file" header of the subpart.
             params["filename"] = path.basename(filename)
@@ -169,10 +170,10 @@ def make_multipart(content, default_encoding="ascii", with_filenames=False):
 
     content -- Dict with content to POST. The dict values are expected to
                be unicode or decodable with us-ascii.
-    default_encoding -- Send multipart with this encoding, if no special 
+    default_encoding -- Send multipart with this encoding, if no special
                         encoding was given with the content. Default is ascii.
     with_filenames -- If True, a multipart's files will be sent with the
-                      filename paramenter set. Default is False.
+                      filename parameter set. Default is False.
 
     """
     def add_disposition(part, name, filename=None, disposition="form-data"):
@@ -193,7 +194,7 @@ def make_multipart(content, default_encoding="ascii", with_filenames=False):
         if with_filenames and (filename is not None):
             # RFC 2388 Returning Values from Forms: multipart/form-data
             # The original local file name may be supplied as well, either as
-            # a "filename" parameter either of the "content-disposition: 
+            # a "filename" parameter either of the "content-disposition:
             # form-data" header or, in the case of multiple files, in a
             # "content-disposition: file" header of the subpart.
             params["filename"] = path.basename(filename)
@@ -219,7 +220,7 @@ def make_multipart(content, default_encoding="ascii", with_filenames=False):
         if multiple:
             # RFC 2388 Returning Values from Forms: multipart/form-data
             # The original local file name may be supplied as well, either as
-            # a "filename" parameter either of the "content-disposition: 
+            # a "filename" parameter either of the "content-disposition:
             # form-data" header or, in the case of multiple files, in a
             # "content-disposition: file" header of the subpart.
             kwargs["disposition"] = "file"
@@ -230,7 +231,7 @@ def make_multipart(content, default_encoding="ascii", with_filenames=False):
     mime = MIMEMultipart("form-data")
     files = list()
     items_iterator = content.iteritems() if PYTHON2 else content.items()
-    for (key, data) in items_iterator:
+    for (key, data) in sorted(items_iterator):
         # Are there explicit encodings/content-types given?
         # Note: Cannot do a (value, encoding) = value here as fileobjects then
         # would get iterated, which is not what we want.
@@ -256,14 +257,14 @@ def make_multipart(content, default_encoding="ascii", with_filenames=False):
         filedata = files[0]
         part = create_part(*filedata)
         mime.attach(part)
-    elif filecount > 1: 
+    elif filecount > 1:
         # RFC 2388 Returning Values from Forms: multipart/form-data
         # 4.2 Sets of files
         # If the value of a form field is a set of files rather than a single
         # file, that value can be transferred together using the
         # "multipart/mixed" format.
         mixed = MIMEMultipart("mixed")
-        for filedata in files:
+        for filedata in sorted(files):
             part = create_part(multiple=True, *filedata)
             mixed.attach(part)
         mime.attach(mixed)

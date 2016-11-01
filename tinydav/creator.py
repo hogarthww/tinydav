@@ -48,7 +48,7 @@ def create_propfind(names=False, properties=None,
                     include=None, namespaces=None):
     """Construct and return XML string for PROPFIND.
 
-    names -- Boolean whether the profind is requesting property names only.
+    names -- Boolean whether the propfind is requesting property names only.
     properties -- An iterable containing property names to request. Will only
                   by considered when names is False.
     include -- An Iterable containing properties that shall be returned by the
@@ -87,7 +87,7 @@ def create_propfind(names=False, properties=None,
             include_element = SubElement(propfind, "include")
             for propname in include:
                 inclprop = SubElement(include_element, propname)
-    return tostring(propfind, "UTF-8")
+    return tostring(propfind, "utf-8")
 
 
 def create_proppatch(setprops, delprops, namespaces=None):
@@ -110,17 +110,17 @@ def create_proppatch(setprops, delprops, namespaces=None):
         set_ = SubElement(propertyupdate, "set")
         prop = SubElement(set_, "prop")
         items_iterator = setprops.iteritems() if PYTHON2 else setprops.items()
-        for (propname, propvalue) in items_iterator:
-            prop = SubElement(prop, propname)
-            prop.text = propvalue
+        for (propname, propvalue) in sorted(items_iterator):
+            _prop = SubElement(prop, propname)
+            _prop.text = propvalue
     # RFC 2518, 12.13.1 set XML element
     # <!ELEMENT remove (prop) >
     if delprops:
         remove = SubElement(propertyupdate, "remove")
         prop = SubElement(remove, "prop")
-        for propname in delprops:
-            prop = SubElement(prop, propname)
-    return tostring(propertyupdate, "UTF-8")
+        for propname in sorted(delprops):
+            _prop = SubElement(prop, propname)
+    return tostring(propertyupdate, "utf-8")
 
 
 def create_lock(scope="exclusive", type_="write", owner=None):
@@ -181,7 +181,7 @@ def create_report_version_tree(properties=None, elements=None, namespaces=None):
     if elements:
         for element in elements:
             report.append(element)
-    return tostring(report, "UTF-8")
+    return tostring(report, "utf-8")
 
 
 def create_report_expand_property(properties=None, elements=None,
@@ -198,18 +198,18 @@ def create_report_expand_property(properties=None, elements=None,
     _addnamespaces(report, namespaces)
 
     def attach_properties(elem, properties):
-        """Attach property-Elements to given element recursivly.
+        """Attach property-Elements to given element recursively.
 
         elem -- ElementTree.Element to attach property-Elements to.
         properties -- string, list or mapping with element-names to attach.
 
         """
-        if isinstance(properties, basestring):
+        if isinstance(properties, STRING_TYPE):
             properties = {properties: None}
         elif not isinstance(properties, Mapping):
             properties = dict.fromkeys(properties, None)
-        # recursivly attach property-elements to elem
-        for (propname, subprops) in properties.items():
+        # recursively attach property-elements to elem
+        for (propname, subprops) in sorted(properties.items()):
             prop = SubElement(elem, "property")
             prop.attrib["name"] = propname
             if subprops:
@@ -218,7 +218,6 @@ def create_report_expand_property(properties=None, elements=None,
     if properties:
         attach_properties(report, properties)
     if elements:
-        for element in elements:
+        for element in sorted(elements):
             report.append(element)
-    return tostring(report, "UTF-8")
-
+    return tostring(report, "utf-8")
