@@ -1,51 +1,45 @@
---------------------------------
-TinyDAV: A WebDAV client library
---------------------------------
+# TinyDAV: A WebDAV client library
 
-Summary
--------
+## Summary
+
 A simple to use library for contacting WebDAV servers.
 
 
-Requirements
-------------
+## Requirements
+
 * Python 2.5 or higher (including Python 3 series).
 * Setuptools
 * coverage (for unittests)
 
 
-Installation
-------------
-Get from PyPI:
-# pip install tinydav
+## Installation
 
-Get package from https://gitlab.helduel.de/open-source/tinydav:
-python setup.py build
-python setup.py install
+pip install git+https://github.com/hogarthww/tinydav-fork.git
 
 
-Run unittests
--------------
-To run the unittests checkout sources and run:
+## Run unittests
 
-python test/testloader.py
+	pip install pytest
+	pip install --editable .
+	pytest ./test/
 
-Unittests will not run with Python 3.
+or
 
-
-Documentation
--------------
-Tutorial and Reference:
-https://gitlab.helduel.de/open-source/tinydav/wikis/home
+	tox
 
 
-License
--------
+## Documentation
+
+Tutorial and Reference: https://gitlab.helduel.de/open-source/tinydav/wikis/home
+
+
+## License
+
 TinyDAV is licensed under the LGPLv3. See separate COPYING and COPYING.LESSER.
 
 
-Note
-----
+## Note
+
 This version of tinydav is a derivative work based on tinydav 0.7.5 from
 https://gitlab.helduel.de/open-source/tinydav
 
