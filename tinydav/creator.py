@@ -112,7 +112,6 @@ def create_proppatch(setprops, delprops, namespaces=None):
         items_iterator = setprops.iteritems() if PYTHON2 else setprops.items()
         for (propname, propvalue) in sorted(items_iterator):
             if isinstance(propvalue, Element):
-                propvalue.tag = propname
                 prop.append(propvalue)
             else:
                 _prop = SubElement(prop, propname)
