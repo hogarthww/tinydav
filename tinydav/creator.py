@@ -111,8 +111,12 @@ def create_proppatch(setprops, delprops, namespaces=None):
         prop = SubElement(set_, "prop")
         items_iterator = setprops.iteritems() if PYTHON2 else setprops.items()
         for (propname, propvalue) in sorted(items_iterator):
-            _prop = SubElement(prop, propname)
-            _prop.text = propvalue
+            if isinstance(propvalue, Element):
+                prop.append(propvalue)
+            else:
+                _prop = SubElement(prop, propname)
+                _prop.text = propvalue
+
     # RFC 2518, 12.13.1 set XML element
     # <!ELEMENT remove (prop) >
     if delprops:
