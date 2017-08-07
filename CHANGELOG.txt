@@ -2,7 +2,8 @@
 0.2.2 (unreleased)
 ==================
 
-- Nothing changed yet.
+* When generating proppatch request, allow property values in propset to be XML elements,
+  not just plain strings.
 
 
 0.2.1 (2016-11-01)
