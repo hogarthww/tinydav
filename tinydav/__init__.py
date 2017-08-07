@@ -233,7 +233,10 @@ class WebDAVResponse(HTTPResponse):
             if PYTHON2:
                 parse_me = StringIO(self.content)
             else:
-                parse_me = BytesIO(self.content.encode('utf-8'))
+                if isinstance(self.content, bytes):
+                    parse_me = StringIO(str(self.content, 'utf-8'))
+                else:
+                    parse_me = BytesIO(self.content.encode('utf-8'))
             self._etree.parse(parse_me)
         except ParseError:
             # get the exception object this way to be compatible with Python

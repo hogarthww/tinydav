@@ -2,7 +2,8 @@
 0.3.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+* Fixes _parse_xml_content for Python 3 -- httplib (http.client) Response.read returns bytes
+  object, not a str as in Python 2.
 
 
 0.3.0 (2017-08-07)
