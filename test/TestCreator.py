@@ -95,11 +95,18 @@ class TestCreatePropPatch(unittest.TestCase):
         setprops = {"Z:author": author}
         ns = {"CADN": "CADN:", "Z": "http://ns.example.com/Z"}
         xml = creator.create_proppatch(setprops, None, ns)
-        assert xml == (
-            '<propertyupdate xmlns="DAV:" xmlns:CADN="CADN:" xmlns:Z="http://ns.example.com/Z">'
-            '<set><prop><Z:author><name>me</name></Z:author></prop></set>'
-            '</propertyupdate>'
-        )
+        if PYTHONVERSION >= (3, 0):
+            assert xml == (
+                b'<propertyupdate xmlns="DAV:" xmlns:CADN="CADN:" xmlns:Z="http://ns.example.com/Z">'
+                b'<set><prop><Z:author><name>me</name></Z:author></prop></set>'
+                b'</propertyupdate>'
+            )
+        else:
+            assert xml == (
+                '<propertyupdate xmlns="DAV:" xmlns:CADN="CADN:" xmlns:Z="http://ns.example.com/Z">'
+                '<set><prop><Z:author><name>me</name></Z:author></prop></set>'
+                '</propertyupdate>'
+            )
 
     def test_create_proppatch_remove(self):
         """Test WebDAVClient._create_proppatch: remove property"""

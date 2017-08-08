@@ -881,7 +881,11 @@ class WebDAVResponseTestCase(unittest.TestCase):
     def test_parse_xml_content(self):
         """Test WebDAVResponse._parse_xml_content."""
         response = Mock.Response()
-        response.content = MULTISTATUS
+        if PYTHONVERSION >= (3, 0):
+            # In Python3, HTTP Response.read() returns bytes, not str as in Python 2
+            response.content = bytes(MULTISTATUS, 'utf-8')
+        else:
+            response.content = MULTISTATUS
         response.status = 207
         with replaced(WebDAVResponse, _parse_xml_content=Mock.omnivore_func()):
             davresponse = WebDAVResponse(response)
